@@ -1,5 +1,5 @@
 from django import forms
-from .models import *
+from . models import *
 
 class ConvenerSelectionForm(forms.ModelForm):
     class Meta:
@@ -18,7 +18,13 @@ class AcademicForm(forms.ModelForm):
     class Meta:
         model = Bridge
         fields = '__all__'
-    
-    def __init__(self, academic, *args, **kwargs):
-        super(AcademicForm, self).__init__(*args, **kwargs)
-        self.fields['urn'].queryset = Bridge.objects.filter(academicId=academic)
+
+class Academic1Form(AcademicForm):
+    def __init__(self, *args, **kwargs):
+        super(Academic1Form, self).__init__(*args, **kwargs)
+        self.fields['mark'].label = 'Academic 1 Mark'
+
+class Academic2Form(AcademicForm):
+    def __init__(self, *args, **kwargs):
+        super(Academic2Form, self).__init__(*args, **kwargs)
+        self.fields['mark'].label = 'Academic 2 Mark'

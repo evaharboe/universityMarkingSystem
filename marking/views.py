@@ -5,7 +5,7 @@ from .serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from forms import *
+from .forms import *
 
 @api_view(['POST'])
 def studentPage(request, urn):
@@ -33,13 +33,16 @@ def academicPage(request, academicId):
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'POST':
-        form = AcademicForm(request.POST, instance = academic)
-        if form.is_valid():
-            form.save()
+        form1 = Academic1Form(request.POST, prefix = 'academic1')
+        form2 = Academic2Form(request.POST, prefix = 'academic2')
+        if form1.is_valid() and form2.isValid():
+            form1.save()
+            form2.save()
     else:
-        form = AcademicForm(instance=academic)
+        form1 = Academic1Form(prefix = 'academic1')
+        form2 = Academic2Form(prefix = 'academic2')
     
-    return render(request, 'HTML NAME', {'form': form})
+    return render(request, 'HTML NAME', {'form1': form1, 'form2': form2})
 
     
     

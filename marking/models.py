@@ -24,15 +24,6 @@ class Student(models.Model):
     def __str__(self):
         return self.forename + " " + self.surname
 
-class StudentForm(forms.ModelForm):
-    class Meta:
-        model = Student
-        fields = '__all__'
-    
-    widgets = {
-        'keywords': forms.Select(choices=Student.KEYWORD_CHOICES)
-    }
-
 class Academic(models.Model):
     academicId = models.AutoField(primary_key=True)
     forename = models.CharField(max_length=50)
@@ -44,21 +35,28 @@ class Academic(models.Model):
 
 class Bridge(models.Model):
     urn = models.ForeignKey(Student, on_delete=models.CASCADE)
-    academicId = models.ForeignKey(Academic, on_delete=models.CASCADE)
-    mark = models.FloatField()
+    academic1 = models.ForeignKey(Academic, on_delete=models.CASCADE, related_name='academic1')
+    academic2 = models.ForeignKey(Academic, on_delete=models.CASCADE, related_name='academic2')
+    mark1 = models.FloatField()
+    mark2 = models.FloatField()
+    comment = models.TextField()
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['urn', 'academicId'], name='unique_bridge')
+            models.UniqueConstraint(fields=['urn', 'academic1'], name='unique_bridge_academic1'),
+            models.UniqueConstraint(fields=['urn', 'academic2'], name='unique_bridge_academic2')
         ]
 
     def __str__(self):
-        return str(self.urn) + " " + str(self.academicId)
+        return f"{self.urn} - Academic 1: {self.mark1}, Academic 2: {self.mark2}"
 
 class Convener(models.Model):
     convenerId = models.AutoField(primary_key=True)
     forename = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
+    selected_student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='selected_by_convener')
+    academic1 = models.ForeignKey(Academic, on_delete=models.CASCADE, related_name='academic1_convener')
+    academic2 = models.ForeignKey(Academic, on_delete=models.CASCADE, related_name='academic2_convener')
 
     def __str__(self):
         return str(self.forename) + " " + str(self.surname)
