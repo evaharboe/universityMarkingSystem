@@ -28,3 +28,8 @@ class Academic2Form(AcademicForm):
     def __init__(self, *args, **kwargs):
         super(Academic2Form, self).__init__(*args, **kwargs)
         self.fields['mark'].label = 'Academic 2 Mark'
+
+class ModerationForm(forms.ModelForm):
+    class Meta: 
+        model = Moderation
+        fields = '__all__'

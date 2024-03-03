@@ -8,7 +8,7 @@ from rest_framework import status
 from .forms import *
 
 @api_view(['POST'])
-def studentPage(request, urn):
+def StudentPage(request, urn):
 
     try:
         student = Student.objects.get(pk=urn)
@@ -25,7 +25,7 @@ def studentPage(request, urn):
     return render(request, 'htmlNAME', {'student': student, 'form': form})
 
 @api_view(['POST'])
-def academicPage(request, academicId):
+def AcademicPage(request, academicId):
 
     try:
         academic = Academic.objects.get(pk=academicId)
@@ -69,4 +69,19 @@ def ConvenerPage(request, convenerId):
     
     return render(request, 'HTML NAME', {'form': form})
 
+
+@api_view(['POST'])
+def ModerationPage(request, urn):
+    student = get_object_or_404(Student, pk=urn)
+    moderation = Moderation.objects.filter(urn=student).first()
+
+    if request.method == 'POST':
+        form = ModerationForm(request.POST, instance = moderation)
+        if form.is_valid():
+            form.save()
+    
+    else:
+        form = ModerationForm(instance=moderation)
+    
+    return render(request, 'HTML NAME', {'student': student, 'form': form})
 

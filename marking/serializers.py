@@ -15,3 +15,8 @@ class ConvenerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Convener
         fields = '__all__'
+
+class ModerationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Moderation
+        fields = '__all__'
